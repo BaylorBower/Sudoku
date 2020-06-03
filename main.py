@@ -1,28 +1,45 @@
-board = [
-    [7, 8, 0, 4, 0, 0, 1, 2, 0],
-    [6, 0, 0, 0, 7, 5, 0, 0, 9],
-    [0, 0, 0, 6, 0, 1, 0, 7, 8],
-    [0, 0, 7, 0, 4, 0, 2, 6, 0],
-    [0, 0, 1, 0, 5, 0, 9, 3, 0],
-    [9, 0, 4, 0, 6, 0, 0, 0, 5],
-    [0, 7, 0, 3, 0, 0, 0, 1, 2],
-    [1, 2, 0, 0, 0, 7, 4, 0, 0],
-    [0, 4, 9, 2, 0, 6, 0, 0, 7]
-]
-# WIP
-# def createBoard:
+from random import sample
+
+base = 3
+side = base*base
+Difficulty = 1
+
+
+# baseline valid solution
+def pattern(r, c):
+    return (base*(r % base)+r//base+c) % side
+
+
+# randomize rows, columns and numbers (of valid base pattern)
+def shuffle(s):
+    return sample(s,len(s))
+
+
+rBase = range(base)
+rows = [g*base + r for g in shuffle(rBase) for r in shuffle(rBase)]
+cols = [g*base + c for g in shuffle(rBase) for c in shuffle(rBase)]
+nums = shuffle(range(1,base*base+1))
+
+# produce board using randomized baseline pattern
+board = [[nums[pattern(r, c)] for c in cols] for r in rows]
+squares = side*side
+empties = squares * Difficulty//4
+for p in sample(range(squares), empties):
+    board[p//side][p % side] = 0
+
+numSize = len(str(side))
+
 
 # Solves the grid recursively using backtracking
 def solve(bo):
-
     find = findEmpty(bo)
     if not find:
         return True
     else:
         row, col = find
 
-    for i in range(1,10):
-        if valid(bo, i, (row,col)):
+    for i in range(1, 10):
+        if valid(bo, i, (row, col)):
             bo[row][col] = i
 
             if solve(bo):
@@ -46,12 +63,14 @@ def printBoard(bo):
             else:
                 print(str(bo[i][j]) + " ", end="")
 
+
 def findEmpty(bo):
     for i in range(len(bo)):
         for j in range(len(bo[0])):
             if bo[i][j] == 0:
-                return (i,j)
+                return (i, j)
     return None
+
 
 # Checks to see if the number is valid in a certain position
 def valid(bo, num, pos):
@@ -69,13 +88,9 @@ def valid(bo, num, pos):
     boxx = pos[1] // 3
     boxy = pos[0] // 3
 
-    for i in range(boxy * 3 , boxy * 3 + 3):
+    for i in range(boxy * 3, boxy * 3 + 3):
         for j in range(boxx * 3, boxx * 3 + 3):
-            if bo[i][j] == num and (i,j) != pos:
+            if bo[i][j] == num and (i, j) != pos:
                 return False
     return True
 
-printBoard(board)
-print("Before Solve")
-solve(board)
-printBoard(board)
