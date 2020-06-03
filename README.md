@@ -1,5 +1,7 @@
 # Sudoku
-A full Sudoku game with GUI and Auto solve
+A full Sudoku game with GUI, randomized boards and a auto solve using backtracking
+Modify the difficulty variable in main to change difficulty on a range of 1-3
+
 
 # Controls
 Click to select a square
