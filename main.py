@@ -1,8 +1,6 @@
 from random import sample
-
-base = 3
-side = base*base
-Difficulty = 1
+# On a scale of 1-100 difficulty
+Difficulty = 100
 
 
 # baseline valid solution
@@ -14,7 +12,8 @@ def pattern(r, c):
 def shuffle(s):
     return sample(s,len(s))
 
-
+base = 3
+side = base*base
 rBase = range(base)
 rows = [g*base + r for g in shuffle(rBase) for r in shuffle(rBase)]
 cols = [g*base + c for g in shuffle(rBase) for c in shuffle(rBase)]
@@ -23,7 +22,7 @@ nums = shuffle(range(1,base*base+1))
 # produce board using randomized baseline pattern
 board = [[nums[pattern(r, c)] for c in cols] for r in rows]
 squares = side*side
-empties = squares * Difficulty//4
+empties = squares * Difficulty//110
 for p in sample(range(squares), empties):
     board[p//side][p % side] = 0
 
